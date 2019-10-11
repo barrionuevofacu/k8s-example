@@ -1,0 +1,25 @@
+apiVersion: machinelearning.seldon.io/v1alpha2
+kind: SeldonDeployment
+metadata:
+  name: mmodern-classifier
+  labels:
+    app: seldon
+  namespace: default
+spec:
+  name: mmodern-classifier
+  predictors:
+  - componentSpecs:
+    - spec:
+        containers:
+        - image: gabrielg78/classifier:1.0.0
+          imagePullPolicy: Always
+          name: classifier
+    graph:
+      endpoint:
+        type: REST
+      name: classifier
+      type: MODEL
+    labels:
+      version: v1.0.0
+    name: mmodern-classifier
+    replicas: 1

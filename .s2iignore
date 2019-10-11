@@ -1,0 +1,4 @@
+data/*
+model.py
+*.yml
+query-seldon.py

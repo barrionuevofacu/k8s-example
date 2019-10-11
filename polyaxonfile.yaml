@@ -1,0 +1,14 @@
+---
+version: 1
+
+kind: experiment
+
+framework: scikit
+
+build:
+  image: tensorflow/tensorflow:1.14.0-py3
+  build_steps:
+    - pip3 install --no-cache-dir -U polyaxon-client[gcs]==0.5.6 scikit-learn scipy joblib
+
+run:
+  cmd: python3 -u -x train.py -f 10000 -s 80 -a pagressive
