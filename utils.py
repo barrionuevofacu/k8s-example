@@ -59,7 +59,7 @@ CLASSES = [
 ]
 
 
-def getDataFromCsv(filename, delimiter=';', useShuffle=True):
+def getDataFromCsv(filename, delimiter=';', useShuffle=True, columns="0,1"):
     trainX = []
     trainY = []
 
@@ -71,13 +71,23 @@ def getDataFromCsv(filename, delimiter=';', useShuffle=True):
                     csv_file = io.StringIO(tar.extractfile(member).read()
                                            .decode('utf-8'))
                     reader = csv.reader(csv_file, delimiter=delimiter)
-    else:
+                    # this is here because of csv 'I/O op on closed file issue'
+                    for row in reader:
+                        trainX.append(row[int(columns.split(",")[0])])
+                        trainY.append(row[int(columns.split(",")[1])])
+    elif (filename.endswith(".csv") or filename.endswith(".txt")):
         with open(filename, mode='r') as infile:
             reader = csv.reader(infile, delimiter=delimiter)
+            # hack/fix for I/O op on closed file
+            # when using 'with file', file is closed when you leave code block
+            for row in reader:
+                trainX.append(row[int(columns.split(",")[0])])
+                trainY.append(row[int(columns.split(",")[1])])
+
+    else:
+        print("file type not readable for training in this model")
+        return [], []
     # map word_list to number_list
-    for row in reader:
-        trainX.append(row[0])
-        trainY.append(row[1])
     if (useShuffle):
         trainX, trainY = shuffle(trainX, trainY)
 

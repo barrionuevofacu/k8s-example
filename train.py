@@ -20,7 +20,8 @@ np.set_printoptions(suppress=True, linewidth=1000, threshold=1000)
 def main(args):
     print("args: " + str(args))
     print("preparing data ...")
-    trainX, trainY = utils.getDataFromCsv(args.data)
+    trainX, trainY = utils.getDataFromCsv(args.data, columns=args.columns,
+                                          delimiter=args.delimiter)
     print("loaded {} records".format(len(trainX)))
 
     # create the transform
@@ -61,13 +62,15 @@ def main(args):
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("-a", "--algorithm", dest="algorithm",
-                        help="classifier algorithm to train",
+                        help="classifier algorithm to train: sgd | " +
+                        "paggressive | logistic (default 'logistic')",
                         default="logistic")
     parser.add_argument("-s", "--sample_size", dest="sample_size",
-                        help="percentage of example data used to training",
+                        help="percentage of example data used to training " +
+                        "(default 80)",
                         type=int, default=80)
     parser.add_argument("-f", "--features", dest="features",
-                        help="feature dictionary size (default=400)",
+                        help="feature dictionary size (default=65535)",
                         type=int, default=65535)
     parser.add_argument("-u", "--use_hashing", dest="use_hashing",
                         help="Vectorizer type: true -> *hashing* | " +
@@ -76,6 +79,13 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--data", dest="data",
                         help="file with train/test data",
                         default="data/entrenamiento.tar.gz")
+    parser.add_argument("-c", "--columns", dest="columns",
+                        help="columns indicator: '<x-col>,<y-col>' " +
+                        "(default '0,1')",
+                        default="0,1")
+    parser.add_argument("-l", "--delimiter", dest="delimiter",
+                        help="csv column delimiter (default ';')",
+                        default=";")
 
     args = parser.parse_args()
     main(args)
