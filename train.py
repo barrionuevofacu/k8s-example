@@ -20,7 +20,7 @@ np.set_printoptions(suppress=True, linewidth=1000, threshold=1000)
 def main(args):
     print("args: " + str(args))
     print("preparing data ...")
-    trainX, trainY = utils.getDataFromCsv("data/entrenamiento.tar.gz")
+    trainX, trainY = utils.getDataFromCsv(args.data)
     print("loaded {} records".format(len(trainX)))
 
     # create the transform
@@ -73,6 +73,9 @@ if __name__ == "__main__":
                         help="Vectorizer type: true -> *hashing* | " +
                         "false -> TFID",
                         type=utils.str2bool, default=True)
+    parser.add_argument("-d", "--data", dest="data",
+                        help="file with train/test data",
+                        default="data/entrenamiento.tar.gz")
 
     args = parser.parse_args()
     main(args)
